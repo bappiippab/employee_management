@@ -73,7 +73,7 @@ class EmployeeController extends Controller
 
     public function update($id, Request $request)
     {
-        $company = $this->employee_model->where("id", $id)->first();
+        $employee = $this->employee_model->where("id", $id)->first();
         $employee->first_name = $request->get("first_name");
         $employee->last_name = $request->get("last_name");
         $employee->company = $request->get("company");
