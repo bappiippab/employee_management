@@ -19,8 +19,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('company', 'CompanyController@home');
+Route::get('employee', 'EmployeeController@home');
 
 Route::group(['prefix' => "api"], function(){
     Route::resource('company', 'CompanyController');
+    Route::resource('employee', 'EmployeeController');
 });
 

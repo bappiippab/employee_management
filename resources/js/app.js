@@ -16,6 +16,7 @@ Vue.use(VueAxios, axios);
 Vue.component('paginate', require('vuejs-paginate'));
 
 Vue.component('company-index-component', require('./components/CompanyIndexComponent.vue').default);
+Vue.component('employee-index-component', require('./components/EmployeeIndexComponent.vue').default);
 
 const app = new Vue({
     el: '#app'

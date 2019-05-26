@@ -19,12 +19,18 @@ class CompanyController extends Controller
         return view("company.index");
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $response =  $this->company_model->paginate(10);
-        return $this->setCustomStatusCode(2000)->setResourceType('company')
+        if($request->has("type") && $request->get("type") == "all"){
+            $response =  $this->company_model->get();
+            return $this->setCustomStatusCode(2000)->setResourceType('company')
+            ->respondWithCollection($response->toArray());
+        }else{
+            $response =  $this->company_model->paginate(10);
+            return $this->setCustomStatusCode(2000)->setResourceType('company')
             ->setResourceCount(count($response))
             ->setPaginatedData($response->toArray())->respondWithCollection($response->toArray());
+        }
     }
 
     public function create()
@@ -34,12 +40,6 @@ class CompanyController extends Controller
 
     public function store(Request $request)
     {
-        /* $input = $request->all();
-        $validator = $this->validateInput($input, [
-            'name' => 'required',
-            'email' => 'unique',
-        ]); */
-
         $input = $request->all();
         $validator = Validator::make($input,[ 
             'name' => 'required',
