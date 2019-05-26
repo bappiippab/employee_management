@@ -53,7 +53,7 @@
                                     <td>
                                         <div class="btn-group" role="group">
                                             <button type="button" v-on:click="editCompany(company.id)" class="btn btn-warning">Edit</button>
-                                            <button type="button" class="btn btn-danger">Delete</button>
+                                            <button type="button" v-on:click="deleteCompany(company.id)" class="btn btn-danger">Delete</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -123,7 +123,7 @@
                         var resp = response.data;
                         if(resp.status == 2002){
                             this.$swal(resp.success.message,'','success');
-                            this.fetchCompanies(1);
+                            this.fetchCompanies(this.page);
 
                             this.company.id = "";
                             this.company.name = "";
@@ -143,7 +143,7 @@
                         var resp = response.data;
                         if(resp.status == 2001){
                             this.$swal(resp.success.message,'','success');
-                            this.fetchCompanies(1);
+                            this.fetchCompanies(this.page);
                         }else{
                             var error_string = "";
                             for (var i in resp.error.errors) {
@@ -173,6 +173,30 @@
                 this.company.email = "";
                 this.company.logo = "";
                 this.company.website = "";
+            },
+            deleteCompany: function(company_id) {
+                this.$swal({
+                    title: 'Are you sure?',
+                    text: "",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                    if (result.value) {
+                        axios.delete(base_url+'/api/company/'+company_id)
+                            .then(response => {
+                                var resp = response.data;
+                                if(resp.status == 2003){
+                                    this.$swal(resp.success.message,'','success');
+                                    this.fetchCompanies(this.page);
+                                }else{
+                                    this.$swal(resp.error.message,"",'error');
+                                }
+                            });
+                    }
+                })
             }
         }
     }

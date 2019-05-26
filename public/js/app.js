@@ -1893,7 +1893,7 @@ __webpack_require__.r(__webpack_exports__);
           if (resp.status == 2002) {
             _this2.$swal(resp.success.message, '', 'success');
 
-            _this2.fetchCompanies(1);
+            _this2.fetchCompanies(_this2.page);
 
             _this2.company.id = "";
             _this2.company.name = "";
@@ -1917,7 +1917,7 @@ __webpack_require__.r(__webpack_exports__);
           if (resp.status == 2001) {
             _this2.$swal(resp.success.message, '', 'success');
 
-            _this2.fetchCompanies(1);
+            _this2.fetchCompanies(_this2.page);
           } else {
             var error_string = "";
 
@@ -1951,6 +1951,33 @@ __webpack_require__.r(__webpack_exports__);
       this.company.email = "";
       this.company.logo = "";
       this.company.website = "";
+    },
+    deleteCompany: function deleteCompany(company_id) {
+      var _this4 = this;
+
+      this.$swal({
+        title: 'Are you sure?',
+        text: "",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(function (result) {
+        if (result.value) {
+          axios["delete"](base_url + '/api/company/' + company_id).then(function (response) {
+            var resp = response.data;
+
+            if (resp.status == 2003) {
+              _this4.$swal(resp.success.message, '', 'success');
+
+              _this4.fetchCompanies(_this4.page);
+            } else {
+              _this4.$swal(resp.error.message, "", 'error');
+            }
+          });
+        }
+      });
     }
   }
 });
@@ -38117,7 +38144,12 @@ var render = function() {
                                 "button",
                                 {
                                   staticClass: "btn btn-danger",
-                                  attrs: { type: "button" }
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.deleteCompany(company.id)
+                                    }
+                                  }
                                 },
                                 [_vm._v("Delete")]
                               )

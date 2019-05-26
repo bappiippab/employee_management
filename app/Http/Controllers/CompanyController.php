@@ -90,6 +90,11 @@ class CompanyController extends Controller
 
     public function destroy($id)
     {
-        //
+        $company = $this->company_model->where("id", $id)->first();
+        $response = $company->delete();
+        if (!!$response) {
+            return $this->setCustomStatusCode(2003)->respondWithSuccess("Company Deleted Successfully");
+        }
+        return $this->setErrorCode(4000)->respondWithError("Failed to delete Company");
     }
 }
