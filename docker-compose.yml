@@ -1,0 +1,68 @@
+version: '3'
+networks:
+  basic:
+    driver:
+      bridge
+volumes:
+  db:
+    driver: local
+
+services:
+  nginx:
+    networks:
+      - basic
+    build:
+      dockerfile: Dockerfile-nginx
+      context: .
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+    links:
+      - fpm
+  fpm:
+    networks:
+      - basic
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "9000:9000"
+    build:
+      context: .
+      dockerfile: Dockerfile-fpm
+    links:
+      - db      
+    env_file:
+      .env
+  db:
+    networks:
+      - basic  
+    image: mysql:5.7.17
+    links:
+      - myadmin
+    ports:
+      - "3306:3306"    
+    env_file:
+      .env
+    volumes:
+      - "./data/mysql:/var/lib/mysql"
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+  myadmin:
+    networks:
+      - basic
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8082:80"
+    env_file:
+      .env
+  adminer:
+    networks:
+      - basic
+    image: adminer
+    ports:
+      - 8081:8080
+    env_file:
+      .env
+
