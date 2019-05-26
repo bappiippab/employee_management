@@ -38765,7 +38765,9 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(employee.last_name))]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(employee.company))]),
+                        _c("td", [
+                          _vm._v(_vm._s(employee.company_details.name))
+                        ]),
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(employee.email))]),
                         _vm._v(" "),

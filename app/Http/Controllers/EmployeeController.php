@@ -21,15 +21,10 @@ class EmployeeController extends Controller
 
     public function index()
     {
-        $response =  $this->employee_model->paginate(10);
+        $response =  $this->employee_model->with(["company_details"])->paginate(10);
         return $this->setCustomStatusCode(2000)->setResourceType('employee')
             ->setResourceCount(count($response))
             ->setPaginatedData($response->toArray())->respondWithCollection($response->toArray());
-    }
-
-    public function create()
-    {
-        //
     }
 
     public function store(Request $request)
@@ -58,11 +53,6 @@ class EmployeeController extends Controller
             return $this->setCustomStatusCode(2001)->setResourceIdName('employeeId')->setResourceId($response)->respondWithCreated("employee Saved Successfully");
         }
         return $this->setErrorCode(4000)->setCustomStatusCode(4000)->respondWithError("Failed to save employee");
-    }
-
-    public function show($id)
-    {
-        //
     }
 
     public function edit($id)

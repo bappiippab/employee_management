@@ -60,7 +60,7 @@
                                 <tr v-if="employees.employee.data.length" v-for="employee in employees.employee.data">
                                     <td>{{ employee.first_name }}</td>
                                     <td>{{ employee.last_name }}</td>
-                                    <td>{{ employee.company }}</td>
+                                    <td>{{ employee.company_details.name }}</td>
                                     <td>{{ employee.email }}</td>
                                     <td>{{ employee.phone }}</td>
                                     <td>

@@ -33,11 +33,6 @@ class CompanyController extends Controller
         }
     }
 
-    public function create()
-    {
-        //
-    }
-
     public function store(Request $request)
     {
         $input = $request->all();
@@ -61,11 +56,6 @@ class CompanyController extends Controller
             return $this->setCustomStatusCode(2001)->setResourceIdName('companyId')->setResourceId($response)->respondWithCreated("Company Saved Successfully");
         }
         return $this->setErrorCode(4000)->setCustomStatusCode(4000)->respondWithError("Failed to save company");
-    }
-
-    public function show($id)
-    {
-        //
     }
 
     public function edit($id)
