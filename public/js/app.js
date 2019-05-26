@@ -1818,16 +1818,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       companies: {
+        company: {
+          data: []
+        },
         paginate: {
           last_page: 0
         }
       },
       page: 1,
-      base_url: base_url
+      base_url: base_url,
+      company: {
+        name: "",
+        email: "",
+        logo: "",
+        website: ""
+      }
     };
   },
   ready: function ready() {
@@ -1849,62 +1877,24 @@ __webpack_require__.r(__webpack_exports__);
       });
       console.log(this.companies);
     },
-    viewCoupon: function viewCoupon(coupon) {
-      this.coupon = coupon;
-      this.coupon.eligibleUsersArray = coupon.eligibleUsers.split(",");
-    },
-    deleteCoupons: function deleteCoupons(coupon_id) {
+    saveCompany: function saveCompany() {
       var _this2 = this;
 
-      var swalWithBootstrapButtons = this.$swal.mixin({
-        confirmButtonClass: 'btn btn-success btn-flat',
-        cancelButtonClass: 'btn btn-danger btn-flat',
-        buttonsStyling: false
-      });
-      swalWithBootstrapButtons({
-        title: 'Are you sure ?',
-        text: "",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No',
-        reverseButtons: true
-      }).then(function (result) {
-        if (result.value) {
-          axios["delete"](base_url + '/admin/coupons/' + coupon_id).then(function (response) {
-            var resp = response.data;
+      axios.post(base_url + '/api/company', this.company).then(function (response) {
+        var resp = response.data;
 
-            if (resp.status == 2003) {
-              _this2.$swal(resp.success.message, '', 'success');
+        if (resp.status == 2001) {
+          _this2.$swal(resp.success.message, '', 'success');
+        } else {
+          var error_string = "";
 
-              _this2.getCoupons(_this2.page);
+          for (var i in resp.error.errors) {
+            error_string += "<span class='text-red'>" + resp.error.errors[i][0] + "</span><br>";
+          }
 
-              _this2.coupon = {
-                ID: "",
-                code: "",
-                eligibleUsers: "",
-                couponType: "",
-                limit: "",
-                maximumLimit: "",
-                amountType: "",
-                percentage: "",
-                amount: "",
-                generatedFor: "",
-                generatorName: "",
-                startedAt: "",
-                expiredAt: "",
-                eligibleUsersArray: []
-              };
-            } else {
-              _this2.$swal(resp.error.message, "", 'error');
-            }
-          });
+          _this2.$swal(resp.error.message, error_string, 'error');
         }
       });
-    },
-    viewAppliedUsers: function viewAppliedUsers(users) {
-      this.applied_by_users = users;
-      console.log(this.applied_by_users);
     }
   }
 });
@@ -37225,7 +37215,114 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-4" }),
+      _c("div", { staticClass: "col-md-4" }, [
+        _c("div", { staticClass: "box box-widget" }, [
+          _c("div", { staticClass: "box-body table-responsive" }, [
+            _c(
+              "form",
+              {
+                attrs: { id: "frm-create-company" },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.saveCompany($event)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "name" } }, [_vm._v("Name")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.company.name,
+                        expression: "company.name"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      id: "name",
+                      name: "name",
+                      required: ""
+                    },
+                    domProps: { value: _vm.company.name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.company, "name", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "email" } }, [_vm._v("Email")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.company.email,
+                        expression: "company.email"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "email", name: "email" },
+                    domProps: { value: _vm.company.email },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.company, "email", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "website" } }, [
+                    _vm._v("Website")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.company.website,
+                        expression: "company.website"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", id: "website", name: "website" },
+                    domProps: { value: _vm.company.website },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.company, "website", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("button", { staticClass: "form-control btn btn-success" }, [
+                  _vm._v("Save")
+                ])
+              ]
+            )
+          ])
+        ])
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-md-8" }, [
         _c("div", { staticClass: "box box-widget" }, [
@@ -49650,8 +49747,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/sajib/workstation/employee_management/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/sajib/workstation/employee_management/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/sajib/workstation/em/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/sajib/workstation/em/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

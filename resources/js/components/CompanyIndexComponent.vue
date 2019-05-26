@@ -2,7 +2,26 @@
     <div>
         <div class="row">
             <div class="col-md-4">
-                
+                <div class="box box-widget">
+                    <div class="box-body table-responsive">
+                        <form id="frm-create-company" v-on:submit.prevent="saveCompany">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input class="form-control" type="text" id="name" name="name" v-model="company.name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input class="form-control" type="text" id="email" name="email" v-model="company.email">
+                            </div>
+                            <div class="form-group">
+                                <label for="website">Website</label>
+                                <input class="form-control" type="text" id="website" name="website" v-model="company.website">
+                            </div>
+
+                            <button class="form-control btn btn-success">Save</button>
+                        </form>
+                    </div>
+                </div>
             </div>
             <div class="col-md-8">
                 <div class="box box-widget">
@@ -58,12 +77,21 @@
         data() {
             return {
                 companies: {
+                    company :{
+                        data: []
+                    },
                     paginate: {
                         last_page :0
                     }
                 },
                 page: 1,
-                base_url: base_url
+                base_url: base_url,
+                company: {
+                    name: "",
+                    email: "",
+                    logo: "",
+                    website: ""
+                }
             };
         },
         ready() {
@@ -84,59 +112,19 @@
 
                 console.log(this.companies);
             },
-            viewCoupon: function(coupon){
-                this.coupon = coupon;
-                this.coupon.eligibleUsersArray = coupon.eligibleUsers.split(",");
-            },
-            deleteCoupons: function (coupon_id) {
-                const swalWithBootstrapButtons = this.$swal.mixin({
-                    confirmButtonClass: 'btn btn-success btn-flat',
-                    cancelButtonClass: 'btn btn-danger btn-flat',
-                    buttonsStyling: false,
-                });
-
-                swalWithBootstrapButtons({
-                    title: 'Are you sure ?',
-                    text: "",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes',
-                    cancelButtonText: 'No',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.value) {
-                        axios.delete(base_url+'/admin/coupons/'+coupon_id)
-                            .then(response => {
-                                var resp = response.data;
-                                if(resp.status == 2003){
-                                    this.$swal(resp.success.message,'','success');
-                                    this.getCoupons(this.page);
-                                    this.coupon = {
-                                        ID: "",
-                                        code: "",
-                                        eligibleUsers: "",
-                                        couponType: "",
-                                        limit: "",
-                                        maximumLimit: "",
-                                        amountType: "",
-                                        percentage: "",
-                                        amount: "",
-                                        generatedFor: "",
-                                        generatorName: "",
-                                        startedAt: "",
-                                        expiredAt: "",
-                                        eligibleUsersArray:[]
-                                    };
-                                }else{
-                                    this.$swal(resp.error.message,"",'error');
-                                }
-                            });
+            saveCompany: function() {
+                axios.post(base_url+'/api/company', this.company).then(response => {
+                    var resp = response.data;
+                    if(resp.status == 2001){
+                        this.$swal(resp.success.message,'','success');
+                    }else{
+                        var error_string = "";
+                        for (var i in resp.error.errors) {
+                            error_string += "<span class='text-red'>"+resp.error.errors[i][0]+"</span><br>";
+                        }
+                        this.$swal(resp.error.message,error_string,'error');
                     }
                 });
-            },
-            viewAppliedUsers: function (users) {
-                this.applied_by_users = users;
-                console.log(this.applied_by_users);
             }
         }
     }
