@@ -70,12 +70,22 @@ class CompanyController extends Controller
 
     public function edit($id)
     {
-        //
+        $response = $this->company_model->where("id", $id)->first();
+        return $this->setCustomStatusCode(2000)->setResourceType('company')->respondWithItem($response->toArray());
     }
 
-    public function update($id)
+    public function update($id, Request $request)
     {
-        //
+        $company = $this->company_model->where("id", $id)->first();
+        $company->name = $request->get("name");
+        $company->email = $request->get("email");
+        $company->logo = $request->get("logo");
+        $company->website = $request->get("website");
+        $response = $company->save();
+        if (!!$response) {
+            return $this->setCustomStatusCode(2002)->setResourceIdName('companyId')->setResourceId($response)->respondWithCreated("Company Updated Successfully");
+        }
+        return $this->setErrorCode(4000)->setCustomStatusCode(4000)->respondWithError("Failed to update company");
     }
 
     public function destroy($id)

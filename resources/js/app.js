@@ -10,6 +10,8 @@ window.Vue = require('vue');
 
 import VueAxios from 'vue-axios';
 import axios from 'axios';
+import VueSweetalert2 from 'vue-sweetalert2';
+Vue.use(VueSweetalert2);
 Vue.use(VueAxios, axios);
 Vue.component('paginate', require('vuejs-paginate'));
 
