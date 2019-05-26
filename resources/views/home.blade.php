@@ -14,7 +14,12 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    <h3>
+                        <strong>Total Companies :</strong>{{ $total_companies }}
+                    </h3>
+                    <h3>
+                        <strong>Total Employees :</strong>{{ $total_employees }}
+                    </h3>
                 </div>
             </div>
         </div>

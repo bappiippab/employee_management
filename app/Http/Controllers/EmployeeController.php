@@ -12,6 +12,7 @@ class EmployeeController extends Controller
 
     public function __construct(Employee $employee) {
         $this->employee_model = $employee;
+        $this->middleware('auth');
     }
 
     public function home()

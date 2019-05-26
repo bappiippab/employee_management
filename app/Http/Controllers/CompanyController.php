@@ -12,6 +12,7 @@ class CompanyController extends Controller
 
     public function __construct(Company $company) {
         $this->company_model = $company;
+        $this->middleware('auth');
     }
 
     public function home()
